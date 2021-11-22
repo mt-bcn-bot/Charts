@@ -67,6 +67,9 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
             return nil
         }
         
+        guard bounds.inset(by: self.layoutMargins).contains(pt)
+            else { return nil }
+        
         guard let h = self.highlighter?.getHighlight(x: pt.x, y: pt.y)
             else { return nil }
         
