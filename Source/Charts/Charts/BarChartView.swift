@@ -70,6 +70,9 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
         guard bounds.inset(by: self.layoutMargins).contains(pt)
             else { return nil }
         
+        guard renderer?.viewPortHandler.isInBounds(point: pt) == true
+            else { return nil }
+        
         guard let h = self.highlighter?.getHighlight(x: pt.x, y: pt.y)
             else { return nil }
         

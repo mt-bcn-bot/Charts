@@ -477,6 +477,9 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         guard bounds.inset(by: self.layoutMargins).contains(pt)
             else { return nil }
         
+        guard renderer?.viewPortHandler.isInBounds(point: pt) == true
+            else { return nil }
+        
         return self.highlighter?.getHighlight(x: pt.x, y: pt.y)
     }
 
