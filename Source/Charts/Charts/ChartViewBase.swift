@@ -474,10 +474,17 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
             return nil
         }
         
-        guard bounds.inset(by: self.layoutMargins).contains(pt)
+        guard bounds
+                .inset(by: UIEdgeInsets(
+                    top: 0.0,
+                    left: self.layoutMargins.left,
+                    bottom: 0.0,
+                    right: self.layoutMargins.right
+                ))
+                .contains(pt)
             else { return nil }
         
-        guard renderer?.viewPortHandler.isInBounds(point: pt) == true
+        guard renderer?.viewPortHandler.isInBoundsX(pt.x) == true
             else { return nil }
         
         return self.highlighter?.getHighlight(x: pt.x, y: pt.y)

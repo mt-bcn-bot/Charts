@@ -12,6 +12,10 @@
 import Foundation
 import CoreGraphics
 
+#if !os(OSX)
+    import UIKit
+#endif
+
 /// Chart that draws bars.
 open class BarChartView: BarLineChartViewBase, BarChartDataProvider
 {
@@ -67,10 +71,17 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
             return nil
         }
         
-        guard bounds.inset(by: self.layoutMargins).contains(pt)
+        guard bounds
+                .inset(by: UIEdgeInsets(
+                    top: 0.0,
+                    left: self.layoutMargins.left,
+                    bottom: 0.0,
+                    right: self.layoutMargins.right
+                ))
+                .contains(pt)
             else { return nil }
         
-        guard renderer?.viewPortHandler.isInBounds(point: pt) == true
+        guard renderer?.viewPortHandler.isInBoundsX(pt.x) == true
             else { return nil }
         
         guard let h = self.highlighter?.getHighlight(x: pt.x, y: pt.y)
