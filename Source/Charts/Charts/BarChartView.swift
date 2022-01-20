@@ -74,9 +74,9 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
         guard bounds
                 .inset(by: UIEdgeInsets(
                     top: 0.0,
-                    left: self.layoutMargins.left,
+                    left: self.layoutMargins.left + .ulpOfOne,
                     bottom: 0.0,
-                    right: self.layoutMargins.right
+                    right: self.layoutMargins.right + .ulpOfOne
                 ))
                 .contains(pt)
             else { return nil }
@@ -85,6 +85,10 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
             else { return nil }
         
         guard let h = self.highlighter?.getHighlight(x: pt.x, y: pt.y)
+            else { return nil }
+        
+        // disallow select not visible item
+        guard renderer?.viewPortHandler.isInBoundsX(h.xPx) == true
             else { return nil }
         
         if !isHighlightFullBarEnabled { return h }

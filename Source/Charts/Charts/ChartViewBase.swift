@@ -477,9 +477,9 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         guard bounds
                 .inset(by: UIEdgeInsets(
                     top: 0.0,
-                    left: self.layoutMargins.left,
+                    left: self.layoutMargins.left + .ulpOfOne,
                     bottom: 0.0,
-                    right: self.layoutMargins.right
+                    right: self.layoutMargins.right + .ulpOfOne
                 ))
                 .contains(pt)
             else { return nil }
@@ -487,7 +487,15 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         guard renderer?.viewPortHandler.isInBoundsX(pt.x) == true
             else { return nil }
         
-        return self.highlighter?.getHighlight(x: pt.x, y: pt.y)
+        let h = self.highlighter?.getHighlight(x: pt.x, y: pt.y)
+        
+        if let h = h {
+            // disallow select not visible item
+            guard renderer?.viewPortHandler.isInBoundsX(h.xPx) == true
+                else { return nil }
+        }
+        
+        return h
     }
 
     /// The last value that was highlighted via touch.
